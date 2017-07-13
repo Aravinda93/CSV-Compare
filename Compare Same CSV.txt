@@ -1,0 +1,72 @@
+import javax.sound.sampled.LineListener;
+import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+
+public class Duplicate {
+
+	public static void main(String[] args) {
+		// To store csv data into arraylist
+		ArrayList<String> inputcsv = new ArrayList<>();
+		ArrayList<String> outputcsv = new ArrayList<>();
+
+		// To store processed output
+		ArrayList<String> comparecsv = new ArrayList<>();
+		// Input of file which needs to be parsed
+		String csvFile = "C:\\Users\\Downloads\\All.csv";
+		BufferedReader csvReader;
+		String csvSplitBy = ",";
+
+		// Read and store the data for output csv (1st csv)
+		try {
+			String line;
+			csvReader = new BufferedReader(new FileReader(csvFile));
+			while ((line = csvReader.readLine()) != null) {
+				inputcsv.add(line);
+			}
+			csvReader.close();
+		} catch (Exception e) {
+			System.out.println("Error reading first file");
+		}
+
+		// Remove the duplicates based on column
+		for (int i = 0; i < inputcsv.size(); i++) {
+			String[] data = inputcsv.get(i).split(csvSplitBy);
+			String col1 = data[0].trim();
+
+			boolean uniquecolumn = true;
+			for (int j = 0; j < outputcsv.size(); j++) {
+				String[] tmp = outputcsv.get(j).split(csvSplitBy);
+				if (j != i) {
+					if (col1.equals(tmp[0].trim())) {
+						uniquecolumn = false;
+					}
+				}
+
+				{
+					uniquecolumn = false;
+					break;
+				}
+
+			}
+			if (uniquecolumn) {
+				comparecsv.add(inputcsv.get(i));
+			}
+		}
+
+		try {
+			FileWriter FinalFile = new FileWriter("NEWFILE.csv");
+			for (String s : comparecsv) {
+
+				FinalFile.append(s);
+				FinalFile.append("\n");
+
+			}
+			FinalFile.close();
+		} catch (Exception e1) {
+			System.out.println("Error");
+		}
+	}
+}
